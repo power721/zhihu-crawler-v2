@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import org.har01d.crawler.bean.HttpConfig;
 import org.har01d.crawler.domain.Answer;
 import org.har01d.crawler.domain.AnswerRepository;
-import org.har01d.crawler.bean.HttpConfig;
 import org.har01d.crawler.domain.Image;
 import org.har01d.crawler.domain.ImageRepository;
 import org.har01d.crawler.domain.Question;
@@ -107,18 +107,16 @@ public class QuestionPageParser implements QuestionParser {
                     String imageUrl = element.attr("src");
                     logger.debug("original image url: {}", imageUrl);
                     if (isValidImage(imageUrl)) {
-                        if (isV2Image(imageUrl)) {
-                            String name = getFileName(imageUrl);
-                            Image image = imageRepository.findFirstByName(name);
-                            if (image == null) {
-                                image = new Image();
-                                image.setUrl(imageUrl);
-                                image.setName(name);
-                                image.setAnswer(answer);
-                            }
-                            queue.offer(image);
-                            result = true;
+                        String name = getFileName(imageUrl);
+                        Image image = imageRepository.findFirstByName(name);
+                        if (image == null) {
+                            image = new Image();
+                            image.setUrl(imageUrl);
+                            image.setName(name);
+                            image.setAnswer(answer);
                         }
+                        queue.offer(image);
+                        result = true;
                     }
                 }
             }

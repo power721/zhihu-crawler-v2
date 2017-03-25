@@ -2,12 +2,9 @@ package org.har01d.crawler.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
@@ -16,7 +13,6 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
 import org.har01d.crawler.bean.HttpConfig;
 import org.har01d.crawler.domain.Image;
 import org.har01d.crawler.domain.ImageRepository;
@@ -98,10 +94,7 @@ public class ImageDownloader implements Downloader {
     }
 
     private File getDirectory(Image image) {
-        String[] components;
-        components = image.getAnswer().getUrl().split("/");
-        String dirName = components[components.length - 1];
-        return new File(imageDirectory, dirName);
+        return new File(imageDirectory, String.valueOf(image.getAnswer().getQuestion().getId()));
     }
 
     private String getFileName(Image image) {

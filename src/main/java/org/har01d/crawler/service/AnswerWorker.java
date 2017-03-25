@@ -1,9 +1,7 @@
 package org.har01d.crawler.service;
 
-import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import org.har01d.crawler.domain.Image;
 import org.har01d.crawler.domain.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

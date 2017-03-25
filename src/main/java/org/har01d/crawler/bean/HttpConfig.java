@@ -1,8 +1,5 @@
 package org.har01d.crawler.bean;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import javax.annotation.PostConstruct;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;

@@ -1,20 +1,16 @@
 package org.har01d.crawler.parser;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.har01d.crawler.bean.QuestionInfo;
 import org.har01d.crawler.bean.HttpConfig;
+import org.har01d.crawler.bean.QuestionInfo;
 import org.har01d.crawler.domain.Question;
 import org.har01d.crawler.domain.QuestionRepository;
 import org.har01d.crawler.util.HttpUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
