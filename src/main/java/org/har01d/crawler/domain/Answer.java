@@ -1,16 +1,25 @@
 package org.har01d.crawler.domain;
 
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 public class Answer {
     @Id
     private long id;
+
+    @ManyToOne
+    @CreatedBy
+    private User author;
 
     private String url;
 
@@ -30,12 +39,26 @@ public class Answer {
     @CreatedDate
     private Date createdTime;
 
+    @OneToMany(targetEntity = Image.class, mappedBy = "answer")
+    private Collection<Image> images;
+
+    @ManyToOne
+    private Question question;
+
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public String getUrl() {
@@ -92,5 +115,21 @@ public class Answer {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public Collection<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(Collection<Image> images) {
+        this.images = images;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 }

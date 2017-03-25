@@ -1,8 +1,10 @@
 package org.har01d.crawler.domain;
 
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,6 +24,9 @@ public class Question {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date createdTime;
+
+    @OneToMany(targetEntity = Answer.class, mappedBy = "question")
+    private Collection<Answer> answers;
 
     public long getId() {
         return id;
@@ -61,5 +66,13 @@ public class Question {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public Collection<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(Collection<Answer> answers) {
+        this.answers = answers;
     }
 }

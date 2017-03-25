@@ -4,6 +4,8 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,6 +25,9 @@ public class Image {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date createdTime;
+
+    @ManyToOne
+    private Answer answer;
 
     public long getId() {
         return id;
@@ -62,5 +67,13 @@ public class Image {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public Answer getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
     }
 }

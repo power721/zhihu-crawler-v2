@@ -1,9 +1,9 @@
 package org.har01d.crawler.domain;
 
+import java.util.Collection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class User {
@@ -19,6 +19,9 @@ public class User {
     private String url;
 
     private int gender;
+
+    @OneToMany(targetEntity = Answer.class, mappedBy = "author")
+    private Collection<Answer> answers;
 
     public String getId() {
         return id;
@@ -74,5 +77,13 @@ public class User {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public Collection<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(Collection<Answer> answers) {
+        this.answers = answers;
     }
 }
