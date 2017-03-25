@@ -12,3 +12,7 @@ spring:
     username: root
     password: admin@power.oj
     driver-class-name: com.mysql.jdbc.Driver
+
+app:
+  image:
+    directory: /media/harold/Entertainment/Image/zhihu-v2/

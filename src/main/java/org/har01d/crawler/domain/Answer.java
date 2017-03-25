@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -14,6 +13,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 public class Answer {
+
     @Id
     private long id;
 

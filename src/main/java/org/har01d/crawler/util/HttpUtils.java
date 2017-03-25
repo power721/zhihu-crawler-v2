@@ -138,6 +138,7 @@ public final class HttpUtils {
     }
 
     private static class MyResponseHandler implements ResponseHandler<String> {
+
         @Override
         public String handleResponse(HttpResponse response) throws IOException {
             int status = response.getStatusLine().getStatusCode();

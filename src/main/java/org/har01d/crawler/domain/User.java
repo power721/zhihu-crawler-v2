@@ -7,6 +7,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class User {
+
     @Id
     private String id;
 

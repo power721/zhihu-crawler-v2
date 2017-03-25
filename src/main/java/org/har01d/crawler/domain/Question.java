@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 public class Question {
+
     @Id
     private long id;
 
