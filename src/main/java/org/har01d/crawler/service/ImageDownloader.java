@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
@@ -40,14 +41,15 @@ public class ImageDownloader implements Downloader {
     @Value("app.image.directory")
     private String imageDirectory;
 
-    private int counter;
+    private AtomicInteger counter = new AtomicInteger(0);
 
     @Override
     public boolean download(final Image image) throws IOException {
         String imageUrl = image.getUrl();
-        String[] components = imageUrl.split("/");
-        final String fileName = components[components.length - 1];
-        final File file = new File(imageDirectory, fileName);
+        final String fileName = getFileName(image);
+
+        File directory = getDirectory(image);
+        final File file = new File(directory, fileName);
 
         String userAgent = httpConfig.getUserAgent();
         final RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(httpConfig.getConnectTimeout())
@@ -82,11 +84,10 @@ public class ImageDownloader implements Downloader {
                             return false;
                         }
                         LOGGER.info("download {} completed, file size {}, total download {} images.", imageUrl,
-                            file.length(), counter);
+                            file.length(), counter.incrementAndGet());
 
                         image.setPath(file.getAbsolutePath());
                         imageRepository.save(image);
-                        counter++;
                         return true;
                     }
                 } else if (status >= 500 && status <= 599) {
@@ -98,6 +99,18 @@ public class ImageDownloader implements Downloader {
 
             return httpClient.execute(httpget, responseHandler);
         }
+    }
+
+    private File getDirectory(Image image) {
+        String[] components;
+        components = image.getAnswer().getUrl().split("/");
+        String dirName = components[components.length - 1];
+        return new File(imageDirectory, dirName);
+    }
+
+    private String getFileName(Image image) {
+        String[] components = image.getUrl().split("/");
+        return components[components.length - 1];
     }
 
 }
