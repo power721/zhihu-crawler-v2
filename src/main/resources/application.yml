@@ -14,5 +14,32 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
 
 app:
+  token: Mi4wQUFBQXV6MGpBQUFBSUlLVW1zaC1DeGNBQUFCaEFsVk5famY3V0FCcWg0bXFIaDdWbXF1Vk1YV0Y0enBhbWhIYWlB|1490266882|3827578b12b519d3eff0b0508c42c3e03bf460b0
+  user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36
+  url:
+    base: https://www.zhihu.com
+    question: https://www.zhihu.com/api/v4/questions/
+    answer: https://www.zhihu.com/api/v4/questions/{id}/answers
   image:
+    queue: 100
     directory: /media/harold/Entertainment/Image/zhihu-v2/
+  question:
+    parser:
+      sleep: 1000
+      queue: 100
+      thread: 20
+  collection:
+    crawler:
+      sleep: 2000
+      thread: 5
+    urls:
+      - https://www.zhihu.com/collection/30822111
+      - https://www.zhihu.com/collection/60771406
+      - https://www.zhihu.com/collection/79818288
+      - https://www.zhihu.com/collection/61633672
+      - https://www.zhihu.com/collection/47238787
+      - https://www.zhihu.com/collection/72114548
+    selector:
+      href:
+        question: .zm-item-title a[href]
+        next: div.border-pager a[href]

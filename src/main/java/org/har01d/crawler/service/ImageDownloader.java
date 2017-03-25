@@ -17,7 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
-import org.har01d.crawler.domain.HttpConfig;
+import org.har01d.crawler.bean.HttpConfig;
 import org.har01d.crawler.domain.Image;
 import org.har01d.crawler.domain.ImageRepository;
 import org.har01d.crawler.exception.ServerSideException;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ImageDownloader implements Downloader {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImageDownloader.class);
+    private static final Logger logger = LoggerFactory.getLogger(ImageDownloader.class);
 
     @Autowired
     private ImageRepository imageRepository;
@@ -38,7 +38,7 @@ public class ImageDownloader implements Downloader {
     @Autowired
     private HttpConfig httpConfig;
 
-    @Value("app.image.directory")
+    @Value("${app.image.directory}")
     private String imageDirectory;
 
     private AtomicInteger counter = new AtomicInteger(0);
@@ -57,17 +57,13 @@ public class ImageDownloader implements Downloader {
             .setCookieSpec(CookieSpecs.STANDARD)
             .setSocketTimeout(httpConfig.getSocketTimeout()).build();
 
-        List<Header> headers =
-            httpConfig.getHeaders().entrySet().stream().map(entry -> new BasicHeader(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-
         try (CloseableHttpClient httpClient =
-            HttpClients.custom().setDefaultRequestConfig(requestConfig).setDefaultHeaders(headers)
+            HttpClients.custom().setDefaultRequestConfig(requestConfig)
                 .setDefaultCookieStore(httpConfig.getCookieStore())
                 .setUserAgent(userAgent).setConnectionTimeToLive(600L, TimeUnit.SECONDS).build()) {
 
             HttpGet httpget = new HttpGet(imageUrl);
-            LOGGER.info("Executing download request {}", httpget.getRequestLine());
+            logger.info("Executing download request {}", httpget.getRequestLine());
 
             // Create a custom response handler
             ResponseHandler<Boolean> responseHandler = response -> {
@@ -80,10 +76,10 @@ public class ImageDownloader implements Downloader {
                         FileUtils.copyInputStreamToFile(entity.getContent(), file);
                         long size = entity.getContentLength();
                         if (size != file.length()) {
-                            LOGGER.warn("download {} failed, expected size {}, got {}!", imageUrl, size, file.length());
+                            logger.warn("download {} failed, expected size {}, got {}!", imageUrl, size, file.length());
                             return false;
                         }
-                        LOGGER.info("download {} completed, file size {}, total download {} images.", imageUrl,
+                        logger.info("download {} completed, file size {}, total download {} images.", imageUrl,
                             file.length(), counter.incrementAndGet());
 
                         image.setPath(file.getAbsolutePath());

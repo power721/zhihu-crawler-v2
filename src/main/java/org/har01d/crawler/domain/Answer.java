@@ -23,21 +23,15 @@ public class Answer {
 
     private String url;
 
-    private String title;
+    private long comments;
 
-    private int comments;
+    private long votes;
 
-    private int votes;
+    private long accessTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date accessTime;
+    private long updatedTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedTime;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdTime;
+    private long createdTime;
 
     @OneToMany(targetEntity = Image.class, mappedBy = "answer")
     private Collection<Image> images;
@@ -69,51 +63,43 @@ public class Answer {
         this.url = url;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getComments() {
+    public long getComments() {
         return comments;
     }
 
-    public void setComments(int comments) {
+    public void setComments(long comments) {
         this.comments = comments;
     }
 
-    public int getVotes() {
+    public long getVotes() {
         return votes;
     }
 
-    public void setVotes(int votes) {
+    public void setVotes(long votes) {
         this.votes = votes;
     }
 
-    public Date getAccessTime() {
+    public long getAccessTime() {
         return accessTime;
     }
 
-    public void setAccessTime(Date accessTime) {
+    public void setAccessTime(long accessTime) {
         this.accessTime = accessTime;
     }
 
-    public Date getUpdatedTime() {
+    public long getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Date updatedTime) {
+    public void setUpdatedTime(long updatedTime) {
         this.updatedTime = updatedTime;
     }
 
-    public Date getCreatedTime() {
+    public long getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(long createdTime) {
         this.createdTime = createdTime;
     }
 

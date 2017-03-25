@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class Worker implements Runnable {
+public class ImageWorker implements Runnable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Worker.class);
+    private static final Logger logger = LoggerFactory.getLogger(ImageWorker.class);
 
     @Autowired
     private Downloader downloader;
@@ -43,16 +43,16 @@ public class Worker implements Runnable {
                         counter++;
                     }
                 } catch (IOException e) {
-                    LOGGER.error("download image {} failed!", image.getUrl(), e);
+                    logger.error("download image {} failed!", image.getUrl(), e);
                 }
             }
         } catch (InterruptedException e) {
-            LOGGER.error("download image interrupted!", e);
+            logger.error("download image interrupted!", e);
         } catch (Throwable e) {
-            LOGGER.error("exception occurred!", e);
+            logger.error("exception occurred!", e);
         }
 
-        LOGGER.info("download {} images.", counter);
+        logger.info("download {} images.", counter);
     }
 
     public void done() {

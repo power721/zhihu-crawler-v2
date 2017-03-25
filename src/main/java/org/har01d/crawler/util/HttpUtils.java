@@ -25,30 +25,26 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.har01d.crawler.domain.HttpConfig;
+import org.har01d.crawler.bean.HttpConfig;
 import org.har01d.crawler.exception.ServerSideException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public final class HttpUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HttpUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
     private static ResponseHandler<String> responseHandler = new MyResponseHandler();
 
     public static String post(String url, Map<String, String> data, HttpConfig config) throws IOException {
         String userAgent = config.getUserAgent();
-        LOGGER.debug(userAgent);
+        logger.debug(userAgent);
         final RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(config.getConnectTimeout())
             .setConnectionRequestTimeout(config.getConnectionRequestTimeout())
             .setCookieSpec(CookieSpecs.STANDARD)
             .setSocketTimeout(config.getSocketTimeout()).build();
 
-        List<Header> headers =
-            config.getHeaders().entrySet().stream().map(entry -> new BasicHeader(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-
         try (CloseableHttpClient httpClient =
-            HttpClients.custom().setDefaultRequestConfig(requestConfig).setDefaultHeaders(headers)
+            HttpClients.custom().setDefaultRequestConfig(requestConfig)
                 .setDefaultCookieStore(config.getCookieStore())
                 .setUserAgent(userAgent).build()) {
 
@@ -58,7 +54,7 @@ public final class HttpUtils {
                     .collect(Collectors.toList());
             httpPost.setEntity(new UrlEncodedFormEntity(urlParameters));
 
-            LOGGER.info("Executing request {}", httpPost.getRequestLine());
+            logger.info("Executing request {}", httpPost.getRequestLine());
 
             // Create a custom response handler
             ResponseHandler<String> responseHandler = new MyResponseHandler();
@@ -70,29 +66,27 @@ public final class HttpUtils {
     public static String get(String url, Map<String, String> data, HttpConfig config)
         throws IOException, URISyntaxException {
         String userAgent = config.getUserAgent();
-        LOGGER.debug(userAgent);
+        logger.debug(userAgent);
         final RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(config.getConnectTimeout())
             .setConnectionRequestTimeout(config.getConnectionRequestTimeout())
             .setCookieSpec(CookieSpecs.STANDARD)
             .setSocketTimeout(config.getSocketTimeout()).build();
 
-        List<Header> headers =
-            config.getHeaders().entrySet().stream().map(entry -> new BasicHeader(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-
         try (CloseableHttpClient httpClient =
-            HttpClients.custom().setDefaultRequestConfig(requestConfig).setDefaultHeaders(headers)
+            HttpClients.custom().setDefaultRequestConfig(requestConfig)
                 .setDefaultCookieStore(config.getCookieStore())
                 .setUserAgent(userAgent).build()) {
 
             URIBuilder uriBuilder = new URIBuilder(url);
-            for (Entry<String, String> entry : data.entrySet()) {
-                uriBuilder.addParameter(entry.getKey(), entry.getValue());
+            if (data != null) {
+                for (Entry<String, String> entry : data.entrySet()) {
+                    uriBuilder.addParameter(entry.getKey(), entry.getValue());
+                }
             }
             HttpGet httpGet = new HttpGet();
             httpGet.setURI(uriBuilder.build());
 
-            LOGGER.info("Executing request {}", url);
+            logger.info("Executing request {}", url);
 
             // Create a custom response handler
 
@@ -102,23 +96,19 @@ public final class HttpUtils {
 
     public static String getHtml(String url, HttpConfig config) throws IOException {
         String userAgent = config.getUserAgent();
-        LOGGER.debug(userAgent);
+        logger.debug(userAgent);
         final RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(config.getConnectTimeout())
             .setConnectionRequestTimeout(config.getConnectionRequestTimeout())
             .setCookieSpec(CookieSpecs.STANDARD)
             .setSocketTimeout(config.getSocketTimeout()).build();
 
-        List<Header> headers =
-            config.getHeaders().entrySet().stream().map(entry -> new BasicHeader(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-
         try (CloseableHttpClient httpClient =
-            HttpClients.custom().setDefaultRequestConfig(requestConfig).setDefaultHeaders(headers)
+            HttpClients.custom().setDefaultRequestConfig(requestConfig)
                 .setDefaultCookieStore(config.getCookieStore())
                 .setUserAgent(userAgent).build()) {
             HttpGet httpget = new HttpGet(url);
 
-            LOGGER.info("Executing request {}", httpget.getRequestLine());
+            logger.info("Executing request {}", httpget.getRequestLine());
 
             // Create a custom response handler
             ResponseHandler<String> responseHandler = new MyResponseHandler();

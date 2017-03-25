@@ -24,7 +24,7 @@ public class Image {
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Date createdTime;
+    private Date createdTime = new Date();
 
     @ManyToOne
     private Answer answer;

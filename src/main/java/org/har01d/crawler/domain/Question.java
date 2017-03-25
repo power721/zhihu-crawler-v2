@@ -19,12 +19,11 @@ public class Question {
 
     private String title;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedTime;
+    private long accessedTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdTime;
+    private long updatedTime;
+
+    private long createdTime;
 
     @OneToMany(targetEntity = Answer.class, mappedBy = "question")
     private Collection<Answer> answers;
@@ -53,19 +52,27 @@ public class Question {
         this.title = title;
     }
 
-    public Date getUpdatedTime() {
+    public long getAccessedTime() {
+        return accessedTime;
+    }
+
+    public void setAccessedTime(long accessedTime) {
+        this.accessedTime = accessedTime;
+    }
+
+    public long getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Date updatedTime) {
+    public void setUpdatedTime(long updatedTime) {
         this.updatedTime = updatedTime;
     }
 
-    public Date getCreatedTime() {
+    public long getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(long createdTime) {
         this.createdTime = createdTime;
     }
 
