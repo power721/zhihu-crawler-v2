@@ -78,9 +78,9 @@ public class ImageDownloader implements Downloader {
                         return true;
                     }
                 } else if (status >= 500 && status <= 599) {
-                    throw new ServerSideException("Unexpected response status: " + status);
+                    throw new ServerSideException("Unexpected response status: " + response.getStatusLine());
                 } else {
-                    throw new ClientProtocolException("Unexpected response status: " + status);
+                    throw new ClientProtocolException("Unexpected response status: " + response.getStatusLine());
                 }
             };
 

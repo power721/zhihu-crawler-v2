@@ -56,24 +56,24 @@ public class CollectionPageParser implements Parser {
             String url = href.attr("href");
             if (url != null) {
                 long id = getQuestionId(url);
-                QuestionInfo info = getQuestionInfo(id);
-                if (info == null) {
-                    continue;
-                }
 
                 Question question = repository.findOne(id);
                 if (question == null) {
+                    QuestionInfo info = getQuestionInfo(id);
+                    if (info == null) {
+                        continue;
+                    }
                     question = createQuestion(info);
                     repository.save(question);
                 }
-                question.setUpdatedTime(info.getUpdatedTime());
 
                 if (question.getAccessedTime() + TimeUnit.DAYS.toMillis(1) < time) {
-                    try {
-                        parser.parse(question);
-                    } finally {
-                        repository.save(question);
+                    if (parser.parse(question)) {
+                        question.setAccessedTime(System.currentTimeMillis());
+                    } else {
+                        question.setAccessedTime(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(30));
                     }
+                    repository.save(question);
                 }
             }
         }
@@ -98,6 +98,7 @@ public class CollectionPageParser implements Parser {
         question.setUrl(info.getUrl());
         question.setTitle(info.getTitle());
         question.setCreatedTime(info.getCreated());
+        question.setUpdatedTime(info.getUpdatedTime());
         return question;
     }
 

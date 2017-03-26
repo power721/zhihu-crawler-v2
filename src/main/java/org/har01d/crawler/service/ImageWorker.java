@@ -66,13 +66,15 @@ public class ImageWorker implements Worker {
                     continue;
                 }
 
+                long sleep = 500L;
                 for (int i = 0; i < retry; ++i) {
                     try {
                         if (downloader.download(image)) {
                             imageRepository.save(image);
                             break;
                         }
-                        Thread.sleep(500L);
+                        Thread.sleep(sleep);
+                        sleep <<= 1;
                     } catch (IOException e) {
                         logger.error("download image {} failed!", image.getUrl(), e);
                     } catch (InterruptedException e) {
@@ -85,7 +87,6 @@ public class ImageWorker implements Worker {
         } catch (Exception e) {
             logger.error("exception occurred!", e);
         }
-
     }
 
     public void done() {

@@ -129,11 +129,6 @@ public class QuestionPageParser implements QuestionParser {
             }
         }
 
-        if (result) {
-            question.setAccessedTime(System.currentTimeMillis());
-        } else {
-            question.setAccessedTime(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(30));
-        }
         return result;
     }
 
