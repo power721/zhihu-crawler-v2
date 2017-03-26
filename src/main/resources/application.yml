@@ -6,7 +6,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL5Dialect
     hibernate:
       # possible values: validate | update | create | create-drop
-      ddl-auto: create
+      ddl-auto: update
   datasource:
     url: jdbc:mysql://localhost/crawler?characterEncoding=UTF-8
     username: root
@@ -23,6 +23,9 @@ app:
   image:
     queue: 100
     directory: /mnt/ubuntu/images/zhihu-v2/
+  worker:
+    retry: 3
+    thread: 10
   question:
     parser:
       sleep: 1000

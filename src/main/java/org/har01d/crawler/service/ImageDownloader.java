@@ -15,7 +15,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.har01d.crawler.bean.HttpConfig;
 import org.har01d.crawler.domain.Image;
-import org.har01d.crawler.domain.ImageRepository;
 import org.har01d.crawler.exception.ServerSideException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +26,6 @@ import org.springframework.stereotype.Component;
 public class ImageDownloader implements Downloader {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageDownloader.class);
-
-    @Autowired
-    private ImageRepository imageRepository;
 
     @Autowired
     private HttpConfig httpConfig;
@@ -79,7 +75,6 @@ public class ImageDownloader implements Downloader {
                             file.length(), counter.incrementAndGet());
 
                         image.setPath(file.getAbsolutePath());
-                        imageRepository.save(image);
                         return true;
                     }
                 } else if (status >= 500 && status <= 599) {

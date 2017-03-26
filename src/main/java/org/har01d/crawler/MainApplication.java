@@ -1,10 +1,8 @@
 package org.har01d.crawler;
 
 import java.util.concurrent.LinkedBlockingQueue;
-import org.har01d.crawler.bean.CollectionsUrls;
 import org.har01d.crawler.domain.Image;
-import org.har01d.crawler.parser.Parser;
-import org.har01d.crawler.service.ImageWorker;
+import org.har01d.crawler.service.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,13 +15,10 @@ import org.springframework.context.annotation.Configuration;
 public class MainApplication implements CommandLineRunner {
 
     @Autowired
-    private Parser parser;
+    private Crawler crawler;
 
     @Autowired
-    private ImageWorker worker;
-
-    @Autowired
-    private CollectionsUrls collectionsUrls;
+    private Worker worker;
 
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
@@ -36,11 +31,7 @@ public class MainApplication implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        new Thread(worker, "worker").start();
-        for (String url : collectionsUrls.getUrls()) {
-            while (url != null) {
-                url = parser.parse(url);
-            }
-        }
+        new Thread(worker).start();
+        crawler.crawler();
     }
 }
