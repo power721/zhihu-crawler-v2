@@ -1,4 +1,4 @@
-package org.har01d.crawler.service;
+package org.har01d.crawler;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MyThreadFactory implements ThreadFactory {
 
     private final ThreadGroup group;
-    private final AtomicInteger threadNumber = new AtomicInteger(1);
+    private final AtomicInteger threadNumber = new AtomicInteger(0);
     private final String namePrefix;
 
     public MyThreadFactory(String namePrefix) {
@@ -21,6 +21,7 @@ public class MyThreadFactory implements ThreadFactory {
         if (t.isDaemon()) {
             t.setDaemon(false);
         }
+
         if (t.getPriority() != Thread.NORM_PRIORITY) {
             t.setPriority(Thread.NORM_PRIORITY);
         }

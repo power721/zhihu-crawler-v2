@@ -49,7 +49,7 @@ public class QuestionPageParser implements QuestionParser {
     @Override
     public boolean parse(Question question) throws IOException {
         int offset = 0;
-        int pageSize = 20;
+        int limit = 20;
         boolean result = false;
         JSONParser parser = new JSONParser();
         JSONObject jsonObject;
@@ -59,9 +59,9 @@ public class QuestionPageParser implements QuestionParser {
             data.put("sort_by", "default");
             data.put("include",
                 "data[*].is_normal,is_sticky,collapsed_by,suggest_edit,comment_count,collapsed_counts,reviewing_comments_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,mark_infos,created_time,updated_time,relationship.is_authorized,is_author,voting,is_thanked,is_nothelp,upvoted_followees;data[*].author.is_blocking,is_blocked,is_followed,voteup_count,message_thread_token,badge[?(type=best_answerer)].topics");
-            data.put("limit", String.valueOf(pageSize));
+            data.put("limit", String.valueOf(limit));
             data.put("offset", String.valueOf(offset));
-            logger.info("url: {}, pageSize: {}, offset: {}", question.getUrl(), pageSize, offset);
+            logger.info("{}: {}, limit: {}, offset: {}", question.getTitle(), question.getUrl(), limit, offset);
             String json;
             try {
                 json = HttpUtils.get(answerApi.replace("{id}", String.valueOf(question.getId())), data, httpConfig);

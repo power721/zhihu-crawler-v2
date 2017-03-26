@@ -6,7 +6,6 @@ import java.util.concurrent.Executors;
 import javax.annotation.PostConstruct;
 import org.har01d.crawler.bean.CollectionsUrls;
 import org.har01d.crawler.parser.Parser;
-import org.har01d.crawler.service.MyThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

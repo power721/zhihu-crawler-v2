@@ -71,7 +71,7 @@ public class ImageDownloader implements Downloader {
                             logger.warn("download {} failed, expected size {}, got {}!", imageUrl, size, file.length());
                             return false;
                         }
-                        logger.info("download {} completed, file size {}, total download {} images.", imageUrl,
+                        logger.info("download {} completed, size {}, {} images.", imageUrl,
                             file.length(), counter.incrementAndGet());
 
                         image.setPath(file.getAbsolutePath());
