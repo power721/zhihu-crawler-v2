@@ -76,9 +76,9 @@ public class ImageWorker implements Worker {
                         Thread.sleep(sleep);
                         sleep <<= 1;
                     } catch (IOException e) {
-                        logger.error("download image {} failed!", image.getUrl(), e);
-                    } catch (InterruptedException e) {
-                        // ignore
+                        if (i + 1 == retry) {
+                            logger.error("download image {} failed!", image.getUrl(), e);
+                        }
                     }
                 }
             }
