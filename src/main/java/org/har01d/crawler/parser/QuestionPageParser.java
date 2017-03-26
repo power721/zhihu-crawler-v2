@@ -5,7 +5,6 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import org.har01d.crawler.bean.HttpConfig;
 import org.har01d.crawler.domain.Answer;
 import org.har01d.crawler.domain.AnswerRepository;
