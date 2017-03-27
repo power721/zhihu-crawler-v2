@@ -62,9 +62,10 @@ public class QuestionPageParser implements QuestionParser {
             data.put("limit", String.valueOf(limit));
             data.put("offset", String.valueOf(offset));
             logger.info("{}: {}, limit: {}, offset: {}", question.getTitle(), question.getUrl(), limit, offset);
+            String url = answerApi.replace("{id}", String.valueOf(question.getId()));
             String json;
             try {
-                json = HttpUtils.get(answerApi.replace("{id}", String.valueOf(question.getId())), data, httpConfig);
+                json = HttpUtils.get(url, data, httpConfig);
             } catch (URISyntaxException e) {
                 throw new IOException(e);
             }
@@ -80,6 +81,7 @@ public class QuestionPageParser implements QuestionParser {
                 break;
             }
 
+            boolean findImage = false;
             for (Object item : items) {
                 JSONObject object = (JSONObject) item;
                 long id = (long) object.get("id");
@@ -116,8 +118,19 @@ public class QuestionPageParser implements QuestionParser {
                         }
                         queue.offer(image);
                         result = true;
+                        findImage = true;
                     }
                 }
+            }
+
+            JSONObject page = (JSONObject) jsonObject.get("paging");
+            boolean isEnd = (boolean) page.get("is_end");
+            if (isEnd) {
+                break;
+            }
+
+            if (question.getAccessedTime() > 0 && !findImage) {
+                break;
             }
 
             offset += items.size();

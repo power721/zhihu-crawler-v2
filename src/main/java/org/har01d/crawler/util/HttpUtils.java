@@ -125,6 +125,10 @@ public final class HttpUtils {
         return spec.toExternalForm();
     }
 
+    public static String get(String url, HttpConfig config) throws IOException, URISyntaxException {
+        return get(url, null, config);
+    }
+
     private static class MyResponseHandler implements ResponseHandler<String> {
 
         @Override

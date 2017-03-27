@@ -18,7 +18,7 @@ app:
   user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.75 Safari/537.36
   url:
     base: https://www.zhihu.com
-    question: https://www.zhihu.com/api/v4/questions/
+    question: https://www.zhihu.com/api/v4/questions/{id}
     answer: https://www.zhihu.com/api/v4/questions/{id}/answers
   image:
     queue: 100

@@ -97,7 +97,7 @@ public class CollectionPageParser implements Parser {
         question.setId(info.getId());
         question.setUrl(info.getUrl());
         question.setTitle(info.getTitle());
-        question.setCreatedTime(info.getCreated());
+        question.setCreatedTime(info.getCreatedTime());
         question.setUpdatedTime(info.getUpdatedTime());
         return question;
     }
@@ -107,13 +107,14 @@ public class CollectionPageParser implements Parser {
         if (matcher.find()) {
             return Long.valueOf(matcher.group(1));
         }
-        return 0;
+        return 0L;
     }
 
     private QuestionInfo getQuestionInfo(long id) {
         // https://www.zhihu.com/api/v4/questions/40438585
         try {
-            String json = HttpUtils.get(questionApi + id, null, httpConfig);
+            String url = questionApi.replace("{id}", String.valueOf(id));
+            String json = HttpUtils.get(url, httpConfig);
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject) parser.parse(json);
 
@@ -122,7 +123,7 @@ public class CollectionPageParser implements Parser {
             info.setUrl((String) jsonObject.get("url"));
             info.setTitle((String) jsonObject.get("title"));
             info.setUpdatedTime((Long) jsonObject.get("updated_time"));
-            info.setCreated((Long) jsonObject.get("created"));
+            info.setCreatedTime((Long) jsonObject.get("created"));
             return info;
         } catch (Exception e) {
             logger.warn("get question info failed!", e);

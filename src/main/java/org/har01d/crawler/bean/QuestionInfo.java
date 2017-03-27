@@ -14,7 +14,7 @@ public class QuestionInfo {
 
     private long updatedTime;
 
-    private long created;
+    private long createdTime;
 
     public long getId() {
         return id;
@@ -64,11 +64,11 @@ public class QuestionInfo {
         this.updatedTime = updatedTime;
     }
 
-    public long getCreated() {
-        return created;
+    public long getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreated(long created) {
-        this.created = created;
+    public void setCreatedTime(long createdTime) {
+        this.createdTime = createdTime;
     }
 }
