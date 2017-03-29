@@ -85,10 +85,14 @@ public class ImageWorker implements Worker {
         } catch (Exception e) {
             logger.error("exception occurred!", e);
         }
+        logger.info("worker completed.");
     }
 
-    public void done() {
+    @Override
+    public void done() throws InterruptedException {
         isDone = true;
+        threadPool.awaitTermination(1L, TimeUnit.HOURS);
+        logger.info("ImageWorker completed.");
     }
 
 }

@@ -65,6 +65,7 @@ public class CollectionPageParser implements Parser {
                     }
                     question = createQuestion(info);
                     repository.save(question);
+                    logger.info("create question {}:{} {}", question.getId(), question.getTitle(), question.getUrl());
                 }
 
                 if (question.getAccessedTime() + TimeUnit.DAYS.toMillis(1) < time) {

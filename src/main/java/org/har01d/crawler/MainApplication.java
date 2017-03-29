@@ -1,5 +1,6 @@
 package org.har01d.crawler;
 
+import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.har01d.crawler.domain.Image;
 import org.har01d.crawler.service.Worker;
@@ -36,8 +37,12 @@ public class MainApplication implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
         logger.info("crawling start.");
+        Date startTime = new Date();
         new Thread(worker).start();
         crawler.crawler();
-        logger.info("crawling completed.");
+        worker.done();
+        Date endTime = new Date();
+        logger.info("crawling completed, start at {}, duration {} ms.", startTime,
+            (endTime.getTime() - startTime.getTime()));
     }
 }

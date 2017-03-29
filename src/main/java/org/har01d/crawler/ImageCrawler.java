@@ -1,8 +1,8 @@
 package org.har01d.crawler;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import org.har01d.crawler.bean.CollectionsUrls;
 import org.har01d.crawler.parser.Parser;
@@ -34,19 +34,26 @@ public class ImageCrawler implements Crawler {
     }
 
     @Override
-    public void crawler() {
+    public void crawler() throws InterruptedException {
         for (String url : collectionsUrls.getUrls()) {
             threadPool.submit(() -> {
                 String collectionsUrl = url;
                 while (collectionsUrl != null) {
                     try {
                         collectionsUrl = parser.parse(collectionsUrl);
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         logger.error("parse collection page failed.", e);
                     }
                 }
+                logger.info("crawler for {} completed.", url);
             });
         }
+
         threadPool.shutdown();
+        if (!threadPool.awaitTermination(3L, TimeUnit.HOURS)) {
+            threadPool.shutdownNow();
+        }
+
+        logger.info("ImageCrawler completed.");
     }
 }

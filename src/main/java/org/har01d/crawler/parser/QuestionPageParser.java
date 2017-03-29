@@ -51,6 +51,7 @@ public class QuestionPageParser implements QuestionParser {
         int offset = 0;
         int limit = 20;
         boolean result = false;
+        String total = "";
         JSONParser parser = new JSONParser();
         JSONObject jsonObject;
 
@@ -61,7 +62,7 @@ public class QuestionPageParser implements QuestionParser {
                 "data[*].is_normal,is_sticky,collapsed_by,suggest_edit,comment_count,collapsed_counts,reviewing_comments_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,mark_infos,created_time,updated_time,relationship.is_authorized,is_author,voting,is_thanked,is_nothelp,upvoted_followees;data[*].author.is_blocking,is_blocked,is_followed,voteup_count,message_thread_token,badge[?(type=best_answerer)].topics");
             data.put("limit", String.valueOf(limit));
             data.put("offset", String.valueOf(offset));
-            logger.info("{}: {}, limit: {}, offset: {}", question.getTitle(), question.getUrl(), limit, offset);
+            logger.info("{} {} limit: {} offset: {} {}", question.getTitle(), question.getUrl(), limit, offset, total);
             String url = answerApi.replace("{id}", String.valueOf(question.getId()));
             String json;
             try {
@@ -88,38 +89,43 @@ public class QuestionPageParser implements QuestionParser {
                 Answer answer = answerRepository.findOne(id);
                 if (answer == null) {
                     answer = createAnswer(question, object);
+                    answerRepository.save(answer);
+                    logger.info("create answer {}:{}", answer.getId(), answer.getUrl());
                 }
 
+                answer.setUpdatedTime((Long) object.get("updated_time"));
                 if (answer.getAccessTime() >= answer.getUpdatedTime()) {
                     continue;
                 }
 
-                answer.setAccessTime(System.currentTimeMillis());
-                answerRepository.save(answer);
-
-                String content = (String) object.get("content");
-                if (content == null) {
-                    continue;
-                }
-
-                Document doc = Jsoup.parse(content);
-                Elements images = doc.select("img");
-                for (Element element : images) {
-                    String imageUrl = element.attr("src");
-                    logger.debug("original image url: {}", imageUrl);
-                    if (isValidImage(imageUrl)) {
-                        String name = getFileName(imageUrl);
-                        Image image = imageRepository.findFirstByName(name);
-                        if (image == null) {
-                            image = new Image();
-                            image.setUrl(imageUrl);
-                            image.setName(name);
-                            image.setAnswer(answer);
-                        }
-                        queue.offer(image);
-                        result = true;
-                        findImage = true;
+                try {
+                    String content = (String) object.get("content");
+                    if (content == null) {
+                        continue;
                     }
+
+                    Document doc = Jsoup.parse(content);
+                    Elements images = doc.select("img");
+                    for (Element element : images) {
+                        String imageUrl = element.attr("src");
+                        logger.debug("original image url: {}", imageUrl);
+                        if (isValidImage(imageUrl)) {
+                            String name = getFileName(imageUrl);
+                            Image image = imageRepository.findFirstByName(name);
+                            if (image == null) {
+                                image = new Image();
+                                image.setUrl(imageUrl);
+                                image.setName(name);
+                                image.setAnswer(answer);
+                            }
+                            queue.offer(image);
+                            result = true;
+                            findImage = true;
+                        }
+                    }
+                } finally {
+                    answer.setAccessTime(System.currentTimeMillis());
+                    answerRepository.save(answer);
                 }
             }
 
@@ -128,6 +134,7 @@ public class QuestionPageParser implements QuestionParser {
             if (isEnd) {
                 break;
             }
+            total = String.valueOf(page.get("totals"));
 
             if (question.getAccessedTime() > 0 && !findImage) {
                 break;
