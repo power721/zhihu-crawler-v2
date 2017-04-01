@@ -42,7 +42,7 @@ public class ImageCrawler implements Crawler {
                     try {
                         collectionsUrl = parser.parse(collectionsUrl);
                     } catch (Exception e) {
-                        logger.error("parse collection page failed.", e);
+                        logger.error("parse collection page failed: " + collectionsUrl, e);
                     }
                 }
                 logger.info("crawler for {} completed.", url);

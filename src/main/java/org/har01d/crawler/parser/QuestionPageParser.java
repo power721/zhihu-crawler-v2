@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 public class QuestionPageParser implements QuestionParser {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionPageParser.class);
+    private static final int MIN_VOTE = 20;
 
     @Autowired
     private LinkedBlockingQueue<Image> queue;
@@ -89,6 +90,9 @@ public class QuestionPageParser implements QuestionParser {
                 Answer answer = answerRepository.findOne(id);
                 if (answer == null) {
                     answer = createAnswer(question, object);
+                    if (answer.getVotes() < MIN_VOTE) {
+                        continue;
+                    }
                     answerRepository.save(answer);
                     logger.info("create answer {}:{}", answer.getId(), answer.getUrl());
                 }
@@ -134,11 +138,11 @@ public class QuestionPageParser implements QuestionParser {
             if (isEnd) {
                 break;
             }
-            total = String.valueOf(page.get("totals"));
 
             if (question.getAccessedTime() > 0 && !findImage) {
                 break;
             }
+            total = String.valueOf(page.get("totals"));
 
             offset += items.size();
             try {

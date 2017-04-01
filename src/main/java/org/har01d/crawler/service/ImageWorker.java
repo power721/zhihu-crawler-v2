@@ -92,7 +92,7 @@ public class ImageWorker implements Worker {
     public void done() throws InterruptedException {
         isDone = true;
         threadPool.awaitTermination(1L, TimeUnit.HOURS);
-        logger.info("ImageWorker completed.");
+        logger.info("ImageWorker completed, total downloaded {} images.", downloader.getCount());
     }
 
 }

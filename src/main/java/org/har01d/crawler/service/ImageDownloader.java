@@ -98,4 +98,8 @@ public class ImageDownloader implements Downloader {
         return components[components.length - 1];
     }
 
+    @Override
+    public int getCount() {
+        return counter.get();
+    }
 }

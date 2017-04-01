@@ -5,4 +5,6 @@ import org.har01d.crawler.domain.Image;
 
 public interface Downloader {
     boolean download(Image image) throws IOException;
+
+    int getCount();
 }
